@@ -35,7 +35,7 @@ url = require('url');
 				};
 				var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
 				
-				getSQL(callback, "INSERT INTO `tracker`.`user_location` (`latitude`, `longitude`, `time_stamp`, `user_id`) VALUES (" + queryObject.lat + ", " + queryObject.lon + ", '" + date + "', " + queryObject.id +")");
+				getSQL(callback, "INSERT INTO user_location (`latitude`, `longitude`, `time_stamp`, `user_id`) VALUES (" + queryObject.lat + ", " + queryObject.lon + ", '" + date + "', " + queryObject.id +")");
 				break;
 			case '/getid':
 				console.log('Receiving request...');
@@ -46,7 +46,7 @@ url = require('url');
 					console.log('json', result);
 					response.end(result);
 				};
-				getSQL(callback, "SELECT id FROM user WHERE username = '"+ queryObject.username + "'" );
+				getSQL(callback, "SELECT id FROM users WHERE username = '"+ queryObject.username + "'" );
 				break;
 			default:
 				show_login(response);
