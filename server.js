@@ -13,41 +13,41 @@ url = require('url');
 				break;
 			case '/createuser':
 				break;
-			// case '/getlocations':
-// 				console.log('Receiving request...');
-// 				var callback = function(err, result) {
-// 					response.writeHead(200, {
-// 						'Content-Type' : 'x-application/json'
-// 					});
-// 					console.log('json', result);
-// 					response.end(result);
-// 				};
-// 				getSQL(callback, 'SELECT * FROM user_location WHERE user_id = ' + queryObject.userid);
-// 				break;
-// 			case '/savelocation':
-// 				console.log('Receiving request...');
-// 				var callback = function(err, result) {
-// 					response.writeHead(200, {
-// 						'Content-Type' : 'x-application/json'
-// 					});
-// 					console.log('json', result);
-// 					response.end(result);
-// 				};
-// 				var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-// 				
-// 				getSQL(callback, "INSERT INTO `tracker`.`user_location` (`latitude`, `longitude`, `time_stamp`, `user_id`) VALUES (" + queryObject.lat + ", " + queryObject.lon + ", '" + date + "', " + queryObject.id +")");
-// 				break;
-// 			case '/getid':
-// 				console.log('Receiving request...');
-// 				var callback = function(err, result) {
-// 					response.writeHead(200, {
-// 						'Content-Type' : 'x-application/json'
-// 					});
-// 					console.log('json', result);
-// 					response.end(result);
-// 				};
-// 				getSQL(callback, "SELECT id FROM user WHERE username = '"+ queryObject.username + "'" );
-// 				
+			case '/getlocations':
+				console.log('Receiving request...');
+				var callback = function(err, result) {
+					response.writeHead(200, {
+						'Content-Type' : 'x-application/json'
+					});
+					console.log('json', result);
+					response.end(result);
+				};
+				getSQL(callback, 'SELECT * FROM user_location WHERE user_id = ' + queryObject.userid);
+				break;
+			case '/savelocation':
+				console.log('Receiving request...');
+				var callback = function(err, result) {
+					response.writeHead(200, {
+						'Content-Type' : 'x-application/json'
+					});
+					console.log('json', result);
+					response.end(result);
+				};
+				var date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+				
+				getSQL(callback, "INSERT INTO `tracker`.`user_location` (`latitude`, `longitude`, `time_stamp`, `user_id`) VALUES (" + queryObject.lat + ", " + queryObject.lon + ", '" + date + "', " + queryObject.id +")");
+				break;
+			case '/getid':
+				console.log('Receiving request...');
+				var callback = function(err, result) {
+					response.writeHead(200, {
+						'Content-Type' : 'x-application/json'
+					});
+					console.log('json', result);
+					response.end(result);
+				};
+				getSQL(callback, "SELECT id FROM user WHERE username = '"+ queryObject.username + "'" );
+				break;
 			default:
 				show_login(response);
 		}
@@ -73,27 +73,17 @@ url = require('url');
 			response.end();
 			});
 		}
-		// function getSQL(callback, query) {
-// 			var mysql = require('mysql');
-// 			var connection = mysql.createConnection ({
-// 				host:'localhost',
-// 				user:'root',
-// 				password: 'Albus_Severus_Potter11',
-// 				database : 'tracker',
-// 			});
-// 			connection.connect();
-// 			var json = '';
-// 			connection.query(query, function (err, results, fields) {
-// 				if (err)
-// 					return callback(err, null);
-// 				
-// 				console.log('The query-result is :', results[0]);
-// 				
-// 				json = JSON.stringify(results);
-// 				connection.end();
-// 				console.log('JSON-result', json);
-// 				callback(null, json);
-// 			});
-// 		}
+		function getSQL(callback, query) {
+			var pg = require('pg');
+			pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+    		client.query(query, function(err, result) {
+      			done();
+      			if (err)
+       			{ callback(err, null ); }
+      			else
+       			{ callback(null, result.rows ); }
+    	});
+  });
+		}
 	}).listen(process.env.PORT || 8080);
 console.log("Server running at http://127.0.0.1:8081/");
