@@ -81,7 +81,7 @@ url = require('url');
       			if (err)
        			{ callback(err, null ); }
       			else
-       			{ callback(null, result.rows ); }
+       			{ callback(null, JSON.stringify(result.rows) ); }
     	});
   });
 		}
